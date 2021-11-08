@@ -9,6 +9,7 @@ python = "^3.8"
 replit = "^3.2.4"
 discord = "^1.7.3"
 Flask = "^2.0.2"
+disrank2 = "^0.0.3"
 
 [tool.poetry.dev-dependencies]
 
