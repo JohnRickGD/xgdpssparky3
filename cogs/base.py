@@ -40,6 +40,7 @@ class MainCommands(commands.Cog, name='Main Commands'):
       file = discord.File(fp=image, filename='image.png')
       await ctx.send(file=file)
 
+    @commands.max_concurrency( number=1,wait = False )
     @commands.command(name='guess',aliases=['g'])
     async def guess(self,ctx,difficult=None):
         if difficult is None:
@@ -60,14 +61,14 @@ class MainCommands(commands.Cog, name='Main Commands'):
           embed.set_footer(text=f'Requested by {ctx.author.name}{ctx.author.discriminator}',icon_url=ctx.author.avatar_url)
           await ctx.send(embed=embed)
           def check(m):
-            return m.content == levelName.lower() and m.channel == ctx.message.channel
+            return m.content == levelName.lower() and m.channel == ctx.message.channel and m
           try:
             try:
               value = getCash(ctx.author)
             except:
               setCash(ctx.author,value=0)
               value = 0
-            await ctx.bot.wait_for('message', check=check,timeout=20.0)
+            msg = await ctx.bot.wait_for('message', check=check,timeout=20.0)
             if difficult.lower() == 'easy':
                 amount = random.randint(1, 20)
                 value += amount
@@ -77,8 +78,8 @@ class MainCommands(commands.Cog, name='Main Commands'):
             if difficult.lower() == 'hard':
                 amount = random.randint(41, 60)
                 value += amount
-            setCash(ctx.author,value=value)
-            embed = discord.Embed(title=f'Congratulation, you guessed {levelName} correctly!',description=f'You have been awarded {amount} Creator Points, {ctx.author.mention}')
+            setCash(msg.author,value=value)
+            embed = discord.Embed(title=f'Congratulation, you guessed {levelName} correctly!',description=f'You have been awarded {amount} Creator Points, {msg.author.mention}')
             await ctx.send(embed=embed)
           except asyncio.TimeoutError:
             embed = discord.Embed(title=f'Time\'s up!',color=0xffffff)
