@@ -11,7 +11,7 @@ class DevCommands(commands.Cog, name='Developer Commands'):
     '''
     The default check for this cog whenever a command is used. Returns True if the command is allowed.
     '''
-    return ctx.author.id == self.bot.author_id
+    return ctx.author.id in [self.bot.author_id,832264231617167381]
 
   @commands.command(  # Decorator to declare where a command is.
     name='reload',  # Name of the command, defaults to function name.

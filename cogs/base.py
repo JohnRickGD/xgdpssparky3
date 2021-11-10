@@ -24,6 +24,15 @@ def setCash(ctx,value):
 class MainCommands(commands.Cog, name='Main Commands'):
     def __init__(self, bot):
       self.bot = bot
+
+    @commands.cooldown(rate=1,per=60*60*24)
+    @commands.command(name='daily')
+    async def daily(self,ctx):
+      cp =getCash(ctx=ctx.author)
+      setCash(ctx=ctx.author,value=cp+25)
+      embed = discord.Embed(title='Claimed',description='You got 25 CPs',color=0x7aadff)
+      await ctx.send(embed=embed)
+
     @commands.command(name='credit')
     async def credit(self,ctx):
       embed = discord.Embed(title='Credits',description='Bot: `Brain Flooder#9985`\nImage: `ZumidoGD#5369`\nPrepared by ZumidoGD',color=0x7aadff)
