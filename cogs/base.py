@@ -32,7 +32,7 @@ class MainCommands(commands.Cog, name='Main Commands'):
     @commands.command(name='profile',aliases=['p'])
     async def profile(self,ctx):
       args = {
-      'bg_image' : 'https://cdn.discordapp.com/attachments/907840531101544508/907885598667309066/Selected_banner-1.png', # Background image link {}
+      'bg_image' : 'https://cdn.discordapp.com/attachments/907840531101544508/907888368468242463/Selected_bannger.png', # Background image link {}
       'profile_image' : f'{ctx.author.avatar_url}', # User profile picture link
       'next_xp' : 30000000, #TeamSeas
       'user_xp' : getCash(ctx.author), # User current xp
