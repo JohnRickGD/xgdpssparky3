@@ -1,13 +1,14 @@
 from discord.ext import commands
-from discord.ext.commands import MissingPermissions, CheckFailure, CommandNotFound, NotOwner, MissingRequiredArgument, TooManyArguments, BotMissingPermissions
-import discord
+from discord.ext.commands import MissingPermissions, CheckFailure, CommandNotFound, NotOwner, MissingRequiredArgument, TooManyArguments, BotMissingPermissions,MaxConcurrencyReached,CommandOnCooldown
 
 class OnCommandErrorCog(commands.Cog, name="on command error"):
   def __init__(self, bot:commands.Bot):
     self.bot = bot
   @commands.Cog.listener()
   async def on_command_error(self, ctx:commands.Context, error:commands.CommandError):
-    if isinstance(error, commands.CommandOnCooldown):
+    if isinstance(error, MaxConcurrencyReached):
+      pass
+    if isinstance(error, CommandOnCooldown):
       day = round(error.retry_after/86400)
       hour = round(error.retry_after/3600)
       minute = round(error.retry_after/60)
@@ -22,23 +23,20 @@ class OnCommandErrorCog(commands.Cog, name="on command error"):
     elif isinstance(error, CommandNotFound):
       await ctx.send("No command found",delete_after=3)
     elif isinstance(error, MissingPermissions):
-      await ctx.send("❌ You don't have permission to do that.")
+      await ctx.send("❌ You don't have permission to do that.",delete_after=3.0)
     elif isinstance(error, BotMissingPermissions):
-      await ctx.send("I don't have permission to do that :(")
+      await ctx.send("I don't have permission to do that :(",delete_after=3.0)
     elif isinstance(error, CheckFailure):
       await ctx.send(error)
     elif isinstance(error, NotOwner):
       await ctx.send(error)
     elif isinstance(error, MissingRequiredArgument):
-        await ctx.send("A argument is missing")
+        await ctx.send("A argument is missing",delete_after=3.0)
     elif isinstance(error, TooManyArguments):
-        await ctx.send("Some arguments are more than needed.")
+        await ctx.send("Some arguments are more than needed.",delete_after=3.0)
     else:
       print(error)
-      await ctx.reply('An unknown error occured.\nFor more help, join this server (https://discord.gg/t9eH5yuMR4) and send us a photo of the error.')
-
-
-  
-  
+      await ctx.send('error',delete_after=3.0)
+ 
 def setup(bot):
 	bot.add_cog(OnCommandErrorCog(bot))

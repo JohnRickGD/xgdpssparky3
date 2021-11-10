@@ -1,3 +1,4 @@
+import os
 from discord.ext import commands
 import json
 import discord
@@ -9,27 +10,31 @@ def getCash(ctx):
   with open('cogs/stats.json')as f:
     stats = f.read()
     stats = json.loads(stats)
-    return stats[f'{ctx.id}']
+    return stats[f'{ctx.id}']["CP"]
 
 def setCash(ctx,value):
   stats={}
   with open('cogs/stats.json','r')as f:
     stats = json.loads(f.read())
   with open('cogs/stats.json','w')as f:
-    stats.update({f'{ctx.id}' : value})
+    stats.update({f'{ctx.id}' : {"CP":value}})
     f.write(json.dumps(stats))
 
 
 class MainCommands(commands.Cog, name='Main Commands'):
     def __init__(self, bot):
       self.bot = bot
+    @commands.command(name='credit')
+    async def credit(self,ctx):
+      embed = discord.Embed(title='Credits',description='Bot: `Brain Flooder#9985`\nImage: `ZumidoGD#5369`\nPrepared by ZumidoGD',color=0x7aadff)
+      await ctx.send(embed=embed)
 
     @commands.command(name='profile',aliases=['p'])
     async def profile(self,ctx):
       args = {
-      'bg_image' : 'https://cdn.discordapp.com/attachments/906037465410838548/906195035035435039/Untitled.png', # Background image link 
+      'bg_image' : 'https://cdn.discordapp.com/attachments/907840531101544508/907885598667309066/Selected_banner-1.png', # Background image link {}
       'profile_image' : f'{ctx.author.avatar_url}', # User profile picture link
-      'next_xp' : 100000000, # xp required for next level
+      'next_xp' : 30000000, #TeamSeas
       'user_xp' : getCash(ctx.author), # User current xp
       'user_name' : f'{ctx.author.name}#{ctx.author.discriminator}', # user name with descriminator 
       'text_color' : '#ffffff', # Text color un HEX
@@ -61,7 +66,7 @@ class MainCommands(commands.Cog, name='Main Commands'):
           embed.set_footer(text=f'Requested by {ctx.author.name}{ctx.author.discriminator}',icon_url=ctx.author.avatar_url)
           await ctx.send(embed=embed)
           def check(m):
-            return m.content == levelName.lower() and m.channel == ctx.message.channel and m
+            return m.content.lower() == levelName.lower() and m.channel == ctx.message.channel and m
           try:
             try:
               value = getCash(ctx.author)
@@ -79,7 +84,7 @@ class MainCommands(commands.Cog, name='Main Commands'):
                 amount = random.randint(41, 60)
                 value += amount
             setCash(msg.author,value=value)
-            embed = discord.Embed(title=f'Congratulation, you guessed {levelName} correctly!',description=f'You have been awarded {amount} Creator Points, {msg.author.mention}')
+            embed = discord.Embed(title=f'Congratulations!, You guessed {levelName} correctly!',description=f'You have been awarded {amount} Creator Points, {msg.author.mention}',color=0xffffff)
             await ctx.send(embed=embed)
           except asyncio.TimeoutError:
             embed = discord.Embed(title=f'Time\'s up!',color=0xffffff)
@@ -108,3 +113,4 @@ class MainCommands(commands.Cog, name='Main Commands'):
 
 def setup(bot):
   bot.add_cog(MainCommands(bot))
+my_secret = os.environ['token']
