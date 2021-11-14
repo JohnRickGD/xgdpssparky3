@@ -1,13 +1,11 @@
 from discord.ext import commands
-from discord.ext.commands import MissingPermissions, CheckFailure, CommandNotFound, NotOwner, MissingRequiredArgument, TooManyArguments, BotMissingPermissions,MaxConcurrencyReached,CommandOnCooldown
+from discord.ext.commands import MissingPermissions, CheckFailure, CommandNotFound, NotOwner, MissingRequiredArgument, TooManyArguments, BotMissingPermissions,MaxConcurrencyReached,CommandOnCooldown,MemberNotFound
 
 class OnCommandErrorCog(commands.Cog, name="on command error"):
   def __init__(self, bot:commands.Bot):
     self.bot = bot
   @commands.Cog.listener()
   async def on_command_error(self, ctx:commands.Context, error:commands.CommandError):
-    if isinstance(error, MaxConcurrencyReached):
-      pass
     if isinstance(error, CommandOnCooldown):
       day = round(error.retry_after/86400)
       hour = round(error.retry_after/3600)
@@ -31,9 +29,13 @@ class OnCommandErrorCog(commands.Cog, name="on command error"):
     elif isinstance(error, NotOwner):
       await ctx.send(error)
     elif isinstance(error, MissingRequiredArgument):
-        await ctx.send("A argument is missing",delete_after=3.0)
+        await ctx.send("Missing Argument(s)",delete_after=3.0)
+    elif isinstance(error,MemberNotFound):
+      await ctx.send('User used Invalid Member. It\'s not very effecttive')
     elif isinstance(error, TooManyArguments):
         await ctx.send("Some arguments are more than needed.",delete_after=3.0)
+    elif isinstance(error,MaxConcurrencyReached):
+      pass
     else:
       print(error)
       await ctx.send('error',delete_after=3.0)

@@ -1,11 +1,13 @@
 from discord.ext import commands
-
+import json
 
 class DevCommands(commands.Cog, name='Developer Commands'):
   '''These are the developer commands'''
 
   def __init__(self, bot):
     self.bot = bot
+
+  
 
   async def cog_check(self, ctx):  
     '''
@@ -58,6 +60,17 @@ class DevCommands(commands.Cog, name='Developer Commands'):
 
     except commands.errors.ExtensionNotFound:
       await ctx.send(f"`{cog}` does not exist!")
+  
+  """@commands.command(name='levels_ALL')
+  async def levels(self,ctx):
+    with open('cogs/level.json')as f:
+        levels = json.loads(f.read())
+        for x in levels['difficulty']:
+          if x == 'legendary':
+            continue
+          for y in levels['difficulty'][x]:
+            imageLink = levels['difficulty'][x][y]
+            await ctx.send(f'{y} {imageLink}')"""
 
   @commands.command(name="listcogs", aliases=['lc'])
   async def listcogs(self, ctx):

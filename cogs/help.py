@@ -6,13 +6,15 @@ class HelpCommands(commands.Cog, name='Help Commands'):
     def __init__(self, bot):
       self.bot = bot
     
-    @commands.command(name='help',description='Uhh.. help?')
+    @commands.command(name='help',description='We know what is it.')
     async def help(self,ctx,*,command_for_help:str=None):
       embed = Embed(color=0x6ba4ff)
       embed.set_thumbnail(url=ctx.author.avatar_url)
       if command_for_help is None:
         cogs = self.bot.cogs
         for x in cogs:
+          if x == 'Developer Commands':
+            continue
           e = self.bot.get_cog(x)
           wit = e.get_commands()
           w = ''

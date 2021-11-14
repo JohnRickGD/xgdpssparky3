@@ -22,7 +22,7 @@ async def on_ready():  # When the bot is ready
 @bot.command(name='sd')
 async def sd(ctx):
   if ctx.author.id == bot.author_id:
-    await bot.logout()
+    await bot.close()
 
 my_secret = os.environ['token']
 if __name__ == '__main__':  # Ensures this is the file being ran
